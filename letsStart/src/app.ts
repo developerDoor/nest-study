@@ -1,15 +1,14 @@
-import * as express from 'express';
+import * as express from "express";
+import { Cat, CatType } from "./app.model";
 
+const app: express.Express = express();
+const port: number = 3000;
 
-const app: express.Express = express()
-const port: number = 3000
-
-const data = [1, 2, 3, 4]
-
-app.get('/', (req: express.Request, res: express.Response) => {
-    res.send({data})
-})
+app.get("/", (req: express.Request, res: express.Response) => {
+  console.log(req);
+  res.send({ cats: Cat });
+});
 
 app.listen(port, () => {
-    console.log(`server is on ${port}`)
-})
+  console.log(`server is on ${port}`);
+});
