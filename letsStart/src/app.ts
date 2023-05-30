@@ -1,9 +1,6 @@
 import * as express from "express";
 import catsRouter from './cats/cats.route'
 
-const app: express.Express = express();
-const port: number = 3000;
-
 // 싱글톤 패턴
 // 최초의 한번 New 연산자를 통해서 인스턴스를 생성한다. 추후 객체에 접근을 할 때 메모리 낭비를 방지할 수 있다.
 // 또한 다른 클래스간의 데이터 공유가 쉽다.
@@ -42,8 +39,8 @@ class Server {
 
     public listen() {
         this.setMiddleware();
-        this.app.listen(port, () => {
-            console.log(`server is on ${port}`);
+        this.app.listen(8000, () => {
+            console.log(`server is on 8000`);
         });
     }
 
