@@ -1,16 +1,29 @@
-import {MiddlewareConsumer, Module, NestModule} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
-import {LoggerMiddleware} from "./common/middlewares/logger.middleware";
+import { LoggerMiddleware } from './common/middlewares/logger.middleware';
+import { MongooseModule } from '@nestjs/mongoose';
+import * as mongoose from 'mongoose';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [CatsModule], // CatsModule, UsersModule 등등의 모듈에서 export 한 서비스들을 AppController나 AppService에서 사용할 수 있다.
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        ConfigModule.forRoot(),
+        MongooseModule.forRoot(process.env.MONGODB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        }),
+        CatsModule,
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule implements NestModule {
+    private readonly isDev: boolean = process.env.MODE === 'dev' ? true : false;
+
     configure(consumer: MiddlewareConsumer) {
         consumer.apply(LoggerMiddleware).forRoutes('*');
+        mongoose.set('debug', this.isDev);
     }
 }
